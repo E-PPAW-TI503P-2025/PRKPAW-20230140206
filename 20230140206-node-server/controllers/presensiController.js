@@ -1,15 +1,11 @@
- 	// 1. Ganti sumber data dari array ke model Sequelize
- 	const { Presensi } = require("../models");
- 	const { format } = require("date-fns-tz");
- 	const timeZone = "Asia/Jakarta";
- 	
- 	exports.CheckIn = async (req, res) => {
- 	  // 2. Gunakan try...catch untuk error handling
- 	  try {
- 	    const { id: userId, nama: userName } = req.user;
- 	    const waktuSekarang = new Date();
- 	
- 	    // 3. Ubah cara mencari data menggunakan 'findOne' dari Sequelize
+const { Presensi, User } = require("../models");
+const { format } = require("date-fns-tz");
+const timeZone = "Asia/Jakarta";
+
+exports.CheckIn = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const waktuSekarang = new Date(); 	    // 3. Ubah cara mencari data menggunakan 'findOne' dari Sequelize
  	    const existingRecord = await Presensi.findOne({
  	      where: { userId: userId, checkOut: null },
  	    });

@@ -4,7 +4,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Presensi extends Model {
     static associate(models) {
-      // relasi dapat didefinisikan di sini
+      Presensi.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     }
   }
 
@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    nama: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
     },
     checkIn: {
       type: DataTypes.DATE,
