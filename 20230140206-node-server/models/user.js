@@ -7,11 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
+     * The models/index file will call this method automatically.
      */
     static associate(models) {
-      // Definisikan relasi di sini jika ada
-      // Contoh: User.hasMany(models.Presensi, { foreignKey: 'userId' });
+      User.hasMany(models.Presensi, { foreignKey: 'userId', as: 'presensi' });
     }
   }
   User.init({

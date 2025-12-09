@@ -1,22 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import DashboardPage from './components/DashboardPage';
+import PresensiPage from './components/PresensiPage';
+import ReportPage from './components/ReportPage';
 
 function App() {
   return (
     <Router>
       <div>
-        <nav className="p-4 bg-gray-100">
-          <Link to="/login" className="mr-4">Login</Link>
-          <Link to="/register">Register</Link>
-        </nav>
-
+        <Navbar />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/presensi" element={<PresensiPage />} />
+          <Route path="/reports" element={<ReportPage />} />
           <Route path="/" element={<LoginPage />} />
         </Routes>
       </div>

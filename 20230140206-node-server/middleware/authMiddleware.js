@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
+const JWT_SECRET = 'INI_ADALAH_KUNCI_RAHASIA_ANDA_YANG_SANGAT_AMAN';
+
 const authenticateToken = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
@@ -10,7 +12,7 @@ const authenticateToken = async (req, res, next) => {
       return res.status(401).json({ message: 'Akses ditolak. Token tidak ditemukan.' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(token, JWT_SECRET);
     
     // Fetch user data from database
     const user = await User.findByPk(decoded.id);
