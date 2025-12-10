@@ -204,6 +204,9 @@ function ReportPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Check-Out
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Bukti Foto
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -235,6 +238,18 @@ function ReportPage() {
                             timeZone: "Asia/Jakarta",
                           })
                         : "Belum Check-Out"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {presensi.buktiFoto ? (
+                        <img
+                          src={`http://localhost:3001/${presensi.buktiFoto}`}
+                          style={{ width: "80px", cursor: "pointer" }}
+                          alt="Bukti Foto"
+                          onClick={() => window.open(`http://localhost:3001/${presensi.buktiFoto}`, '_blank')}
+                        />
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                   </tr>
                 ))

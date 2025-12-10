@@ -7,11 +7,12 @@ const morgan = require("morgan");
 // Impor router
 const presensiRoutes = require("./routes/presensi");
 const reportRoutes = require("./routes/reports");
-
+const path = require('path');
 const authRoutes = require("./routes/auth");
 
 // Middleware
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use((req, res, next) => {

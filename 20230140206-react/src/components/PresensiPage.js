@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import Webcam from "react-webcam";
 
 // Fix untuk default marker icon di React Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -17,7 +18,14 @@ function PresensiCard() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
   const [locationLoading, setLocationLoading] = useState(true);
+  const webcamRef = useRef(null);
+
+  const capture = () => {
+    const imgSrc = webcamRef.current.getScreenshot();
+    setImage(imgSrc);
+  };
 
   // ======================================================
   // Ambil Lokasi User
@@ -52,8 +60,8 @@ function PresensiCard() {
   // Handle Check-In
   // ======================================================
   const handleCheckIn = async () => {
-    if (!coords) {
-      setError("Lokasi belum didapatkan. Mohon izinkan akses lokasi.");
+    if (!coords || !image) {
+      setError("Lokasi dan Foto wajib ada!");
       return;
     }
 
@@ -62,23 +70,19 @@ function PresensiCard() {
     setMessage("");
 
     try {
+      const blob = await (await fetch(image)).blob();
+      const formData = new FormData();
+      formData.append('latitude', coords.lat);
+      formData.append('longitude', coords.lng);
+      formData.append('image', blob, 'selfie.jpg');
+
       const token = localStorage.getItem("token");
-      const config = {
+      await axios.post('http://localhost:3001/api/presensi/check-in', formData, {
         headers: { Authorization: `Bearer ${token}` }
-      };
+      });
 
-      const response = await axios.post(
-        "http://localhost:3001/api/presensi/check-in",
-        {
-          latitude: coords.lat,
-          longitude: coords.lng
-        },
-        config
-      );
-
-      setMessage(response.data.message);
+      setMessage("Check-in berhasil!");
       setError("");
-
     } catch (err) {
       setError(err.response?.data?.message || "Gagal melakukan check-in");
     } finally {
@@ -178,6 +182,25 @@ function PresensiCard() {
           </div>
         ) : null}
 
+        {/* ========================== KAMERA & FOTO ========================== */}
+        <div className="my-4 border rounded-lg bg-black">
+          {image ? (
+            <img src={image} className="w-full" />
+          ) : (
+            <Webcam ref={webcamRef} screenshotFormat="image/jpeg" className="w-full" />
+          )}
+        </div>
+        <div className="mb-4">
+          {!image ? (
+            <button onClick={capture} className="bg-blue-500 text-white px-4 py-2 rounded w-full">
+              Ambil Foto 📸
+            </button>
+          ) : (
+            <button onClick={() => setImage(null)} className="bg-gray-500 text-white px-4 py-2 rounded w-full">
+              Foto Ulang 🔄
+            </button>
+          )}
+        </div>
         {/* ========================== BUTTONS ========================== */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button

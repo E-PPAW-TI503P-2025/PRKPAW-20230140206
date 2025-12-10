@@ -1,42 +1,44 @@
 'use strict';
-const { Model } = require('sequelize');
-
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Presensi extends Model {
     static associate(models) {
-      Presensi.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+      Presensi.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'user'
+      });
     }
   }
-
   Presensi.init({
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
+      allowNull: false
     },
     checkIn: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     checkOut: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: true
+    },
+    buktiFoto: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     latitude: {
       type: DataTypes.DECIMAL(10, 8),
-      allowNull: true,
+      allowNull: true
     },
     longitude: {
       type: DataTypes.DECIMAL(11, 8),
-      allowNull: true,
-    }
+      allowNull: true
+    },
   }, {
     sequelize,
     modelName: 'Presensi',
   });
-
   return Presensi;
 };
